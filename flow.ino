@@ -7,7 +7,7 @@
 // Wiring
 //  - Red wire -> Power (5V)
 //  - Black wire -> GND
-//  - Yellow wire -> GPIO pin
+//  - Yellow wire -> GPIO pin via voltage divider
 
 // We'll change pin no. after wiring
 const int FLOW_SENSOR_PIN = 0;
@@ -60,9 +60,14 @@ void loop()
     {
         detachInterrupt(digitalPinToInterrupt(FLOW_SENSOR_PIN));
 
-        float frequency = pulseCount / ((currentTime - lastTime) / 1000.0);
-        flowRate = frequency / calibrationFactor;
+        // Calculate frequency (Hz) from pulse count
+        float elapsedSeconds = (currentTime - lastTime) / 1000.0;
+        float frequency = pulseCount / elapsedSeconds; // Hz
 
+        // Flow rate from formula: Frequency(Hz) = 5.0 * Q (L/min)
+        flowRate = frequency / calibrationFactor; // L/min
+
+        // Calculate volume for this interval
         float volumeThisSecond = (pulseCount * ML_PER_PULSE) / 1000.0; // Convert mL to L
         totalVolume += volumeThisSecond;
 
@@ -70,6 +75,9 @@ void loop()
         Serial.println("----------------------------------------");
         Serial.print("Pulses: ");
         Serial.println(pulseCount);
+        Serial.print("Frequency: ");
+        Serial.print(frequency, 2);
+        Serial.println(" Hz");
         Serial.print("Flow Rate: ");
         Serial.print(flowRate, 2);
         Serial.println(" L/min");
@@ -81,7 +89,7 @@ void loop()
         Serial.println(" L");
         Serial.println();
 
-        // Reset pulse counter
+        // Reset for next interval
         pulseCount = 0;
         lastTime = currentTime;
 
@@ -89,29 +97,4 @@ void loop()
     }
 
     delay(10);
-}
-
-// Getters
-float getFlowRate()
-{
-    return flowRate;
-}
-
-float getTotalVolume()
-{
-    return totalVolume;
-}
-
-// Function to reset total volume
-void resetTotalVolume()
-{
-    totalVolume = 0.0;
-    Serial.println("Total volume reset to 0");
-}
-
-void setCalibrationFactor(float factor)
-{
-    calibrationFactor = factor;
-    Serial.print("Calibration factor set to: ");
-    Serial.println(calibrationFactor);
 }
