@@ -10,7 +10,7 @@
 //  - Yellow wire -> GPIO pin via voltage divider
 
 // We'll change pin no. after wiring
-const int FLOW_SENSOR_PIN = 0;
+const int FLOW_SENSOR_PIN = 2;
 
 // Flow sensor variables
 volatile unsigned long pulseCount = 0;
