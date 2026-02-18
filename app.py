@@ -209,7 +209,8 @@ async def ble_stream_loop():
 
         if not target:
             found_names = sorted({d.name for d in devices if d.name})
-            preview = ", ".join(found_names[:8]) if found_names else "(no named devices)"
+            preview = ", ".join(
+                found_names[:8]) if found_names else "(no named devices)"
             state["status"] = f"Not found: {DEVICE_NAME}. Found: {preview}. Retrying…"
             await asyncio.sleep(2.0)
             continue
@@ -275,17 +276,18 @@ async def disconnect():
 
 
 # ------------------- UI -------------------
-ui.page_title("SmartSip • Flow Dashboard")
+ui.page_title("SipSmart • Flow Dashboard")
 
 with ui.column().classes("w-full max-w-5xl mx-auto p-6 gap-4"):
-    ui.label("SmartSip (SipSmart) • Live Flow Sensor").classes("text-2xl font-bold")
+    ui.label("SipSmart • Live Flow Sensor").classes("text-2xl font-bold")
 
     # Top status bar
     with ui.card().classes("w-full p-4"):
         with ui.row().classes("w-full items-center justify-between"):
             with ui.column().classes("gap-1"):
                 ui.label("Connection").classes("text-sm opacity-70")
-                conn_chip = ui.chip("Disconnected").classes("q-ma-none bg-red-2")
+                conn_chip = ui.chip("Disconnected").classes(
+                    "q-ma-none bg-red-2")
 
             with ui.column().classes("gap-1"):
                 ui.label("Status").classes("text-sm opacity-70")
@@ -321,8 +323,10 @@ with ui.column().classes("w-full max-w-5xl mx-auto p-6 gap-4"):
 
     # Controls
     with ui.row().classes("gap-3"):
-        start_btn = ui.button("Start", on_click=start_stream).props("color=primary")
-        disc_btn = ui.button("Disconnect", on_click=lambda: asyncio.create_task(disconnect())).props("outline")
+        start_btn = ui.button(
+            "Start", on_click=start_stream).props("color=primary")
+        disc_btn = ui.button("Disconnect", on_click=lambda: asyncio.create_task(
+            disconnect())).props("outline")
 
         def reset_ui():
             reset_metrics()
@@ -347,7 +351,8 @@ with ui.column().classes("w-full max-w-5xl mx-auto p-6 gap-4"):
 
         # last update
         samp: FlowSample | None = state["last_sample"]
-        last_update.text = time.strftime("%H:%M:%S", time.localtime(samp.ts)) if samp else "—"
+        last_update.text = time.strftime(
+            "%H:%M:%S", time.localtime(samp.ts)) if samp else "—"
 
         # product metrics (format nicely)
         last_sip_value.text = f"{state['last_sip_ml']:.1f}"
