@@ -35,7 +35,7 @@ float totalVolume = 0.0;       // Liter
 float calibrationFactor = 5.0; // Frequency(Hz) = 5.0 * Q (L/min)
 
 const float ML_PER_PULSE = 2.25;          // Approximate mL per pulse
-const unsigned long CALC_INTERVAL = 100; // Calculate every second
+const unsigned long CALC_INTERVAL = 100; // Sampling rate: 10Hz (may adjust as needed)
 
 // -------------------- BLE CONFIG --------------------
 #define BLE_DEVICE_NAME "XIAO_Flow"
